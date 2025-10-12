@@ -10,6 +10,7 @@ HWND hTurn;
 
 void AddMenus(HWND hWnd) {
 	hMenu = CreateMenu();
+	AppendMenu(hMenu, MF_STRING, RESTART, L"Play Again");
 	SetMenu(hWnd, hMenu);
 }
 
@@ -17,7 +18,7 @@ void AddControls(HWND hWnd)
 {
 	hTurn = CreateWindowW(L"Edit", L"Turn : X",
 		WS_VISIBLE | WS_CHILD | SS_CENTER,
-		120, 17, 100, 25,
+		60, 17, 200, 25,
 		hWnd, NULL, NULL, NULL);
 
 	hButton1 = CreateWindowW(L"Button", L"",

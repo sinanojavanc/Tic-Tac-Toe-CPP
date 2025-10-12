@@ -1,9 +1,9 @@
 #include <windows.h>
 #include "ui.h"
+#include "logic.h"
 using namespace std;
 
 LRESULT CALLBACK WindowProcedure(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp);
-
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR args, int ncmdshow) {
 	WNDCLASSW wc = { 0 };
@@ -42,6 +42,36 @@ LRESULT CALLBACK WindowProcedure(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
 	case WM_COMMAND:
 		switch (wp)
 		{
+		case RESTART:
+			ResetBoard();
+			break;
+		case BLOCK1:
+			BlockChanger(hButton1, hTurn, 0, 0, isXturn);
+			break;
+		case BLOCK2:
+			BlockChanger(hButton2, hTurn, 1, 0, isXturn);
+			break;
+		case BLOCK3:
+			BlockChanger(hButton3, hTurn, 2, 0, isXturn);
+			break;
+		case BLOCK4:
+			BlockChanger(hButton4, hTurn, 0, 1, isXturn);
+			break;
+		case BLOCK5:
+			BlockChanger(hButton5, hTurn, 1, 1, isXturn);
+			break;
+		case BLOCK6:
+			BlockChanger(hButton6, hTurn, 2, 1, isXturn);
+			break;
+		case BLOCK7:
+			BlockChanger(hButton7, hTurn, 0, 2, isXturn);
+			break;
+		case BLOCK8:
+			BlockChanger(hButton8, hTurn, 1, 2, isXturn);
+			break;
+		case BLOCK9:
+			BlockChanger(hButton9, hTurn, 2, 2, isXturn);
+			break;
 		default:
 			break;
 		}
