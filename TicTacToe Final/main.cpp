@@ -16,7 +16,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR args, int ncmdsho
 	if (!RegisterClassW(&wc))
 		return -1;
 
-	CreateWindowW(L"myWindowClass", L"tic tac toe",
+	CreateWindowW(L"myWindowClass", L"tic tac toe(EASY MODE)",
 		WS_OVERLAPPEDWINDOW | WS_VISIBLE,
 		500, 400, 360, 430,
 		NULL, NULL, hInst, NULL);
@@ -42,6 +42,21 @@ LRESULT CALLBACK WindowProcedure(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
 	case WM_COMMAND:
 		switch (wp)
 		{
+		case EASY_D:
+			SetWindowTextW(hWnd, L"tic tac toe(EASY MODE)");
+			break;
+		case MEDIUM_D:
+			SetWindowTextW(hWnd, L"tic tac toe(MEDIUM MODE)");
+			break;
+		case HARD_D:
+			SetWindowTextW(hWnd, L"tic tac toe(HARD MODE)");
+			break;
+		case VETERAN_D:
+			SetWindowTextW(hWnd, L"tic tac toe(VETERAN MODE)");
+			break;
+		case AI_D:
+			SetWindowTextW(hWnd, L"tic tac toe(AI MODE)");
+			break;
 		case RESTART:
 			ResetBoard();
 			break;

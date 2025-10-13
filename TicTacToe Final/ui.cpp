@@ -1,4 +1,4 @@
-#include <windows.h>
+﻿#include <windows.h>
 #include "ui.h"
 
 HMENU hMenu;
@@ -10,7 +10,19 @@ HWND hTurn;
 
 void AddMenus(HWND hWnd) {
 	hMenu = CreateMenu();
+	HMENU hDifficultyMenu = CreatePopupMenu();
+
 	AppendMenu(hMenu, MF_STRING, RESTART, L"Play Again");
+
+	AppendMenu(hMenu, MF_POPUP, (UINT_PTR)hDifficultyMenu, L"Change Difficulty");
+
+	AppendMenu(hDifficultyMenu, MF_STRING, EASY_D, L"Easy");
+	AppendMenu(hDifficultyMenu, MF_STRING, MEDIUM_D, L"Medium");
+	AppendMenu(hDifficultyMenu, MF_STRING, HARD_D, L"Hard");
+	AppendMenu(hDifficultyMenu, MF_STRING, VETERAN_D, L"Veteran");
+	AppendMenu(hDifficultyMenu, MF_SEPARATOR, 0, NULL);
+	AppendMenu(hDifficultyMenu, MF_STRING, AI_D, L"AI");
+
 	SetMenu(hWnd, hMenu);
 }
 
@@ -18,7 +30,7 @@ void AddControls(HWND hWnd)
 {
 	hTurn = CreateWindowW(L"Edit", L"Turn : X",
 		WS_VISIBLE | WS_CHILD | SS_CENTER,
-		60, 17, 200, 25,
+		17, 17, 300, 25,
 		hWnd, NULL, NULL, NULL);
 
 	hButton1 = CreateWindowW(L"Button", L"",

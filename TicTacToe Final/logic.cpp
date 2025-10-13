@@ -1,33 +1,63 @@
 ﻿#include "logic.h"
 #include "ui.h"
 #include <windows.h>
+#include <thread>
+#include <ctime>
 
 int block[3][3] = { 0 }; // 0: empty, 1: X, 2: O
 bool isXturn = true;
 int winner = 0;
 
+void bot_handler() {
+    while (true) {
+        if (!isXturn) {
+            static bool seeded = false;
+            if (!seeded) {
+                srand(time(0));
+                seeded = true;
+            }
+
+            int pos;
+            do {
+                pos = std::rand() % 9; // generate random number 0 - 9
+                int x = pos % 3;
+                int y = pos / 3;
+                if (block[x][y] == 0) {
+                    
+                }
+            } while (true);
+        }
+    }
+
+}
+
 void BlockChanger(HWND hBtn, HWND hText, int row, int col, bool& xTurn) {
-    if (block[row][col] == 0 && winner == 0) {
-        const wchar_t* turnCh = xTurn ? L"X" : L"O";
-        SetWindowTextW(hBtn, turnCh);
+    if (block[row][col] == 0   &&   winner == 0) {
+        if (xTurn) {
+            const wchar_t* turnCh = xTurn ? L"X" : L"O";
+            SetWindowTextW(hBtn, turnCh);
 
-        block[row][col] = xTurn ? 1 : 2;
+            block[row][col] = xTurn ? 1 : 2;
 
-        xTurn = !xTurn;
-        
-        winner = CheckWinner();
-        if (winner != 0) {
-            if (winner == 1)
-                SetWindowTextW(hText, L".!The X player Wins!.");
-            else
-                SetWindowTextW(hText, L".!The O player Wins!.");
+            xTurn = !xTurn;
+
+            winner = CheckWinner();
+            if (winner != 0) {
+                if (winner == 1)
+                    SetWindowTextW(hText, L".!The X player Wins!.");
+                else
+                    SetWindowTextW(hText, L".!The O player Wins!.");
+            }
+            else if (CheckDraw()) {
+                SetWindowTextW(hText, L".!The game is Drawn!.");
+            }
+            else {
+                SetWindowTextW(hText, xTurn ? L"Turn : X" : L"Turn : O");
+            }
+        } else {
+            SetWindowTextW(hText, L"is Not your turn wait a second..");
         }
-        else if (CheckDraw()) {
-            SetWindowTextW(hText, L".!The game is Drawn!.");
-        }
-        else {
-            SetWindowTextW(hText, xTurn ? L"Turn : X" : L"Turn : O");
-        }
+
         
     }
 }

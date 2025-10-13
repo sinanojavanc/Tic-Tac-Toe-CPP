@@ -11,6 +11,12 @@
 #define BLOCK9 109
 
 #define RESTART 201
+#define EASY_D 301
+#define MEDIUM_D 302
+#define HARD_D 303
+#define VETERAN_D 304
+#define AI_D 305
+
 
 void AddControls(HWND hWnd);
 void AddMenus(HWND hWnd);
