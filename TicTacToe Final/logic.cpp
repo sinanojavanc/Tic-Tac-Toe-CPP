@@ -1,35 +1,12 @@
-﻿#include "logic.h"
+﻿#include <windows.h>
+#include "logic.h"
 #include "ui.h"
-#include <windows.h>
-#include <thread>
+#include "bot.h"
 #include <ctime>
 
 int block[3][3] = { 0 }; // 0: empty, 1: X, 2: O
 bool isXturn = true;
 int winner = 0;
-
-void bot_handler() {
-    while (true) {
-        if (!isXturn) {
-            static bool seeded = false;
-            if (!seeded) {
-                srand(time(0));
-                seeded = true;
-            }
-
-            int pos;
-            do {
-                pos = std::rand() % 9; // generate random number 0 - 9
-                int x = pos % 3;
-                int y = pos / 3;
-                if (block[x][y] == 0) {
-                    
-                }
-            } while (true);
-        }
-    }
-
-}
 
 void BlockChanger(HWND hBtn, HWND hText, int row, int col, bool& xTurn) {
     if (block[row][col] == 0   &&   winner == 0) {
@@ -41,24 +18,30 @@ void BlockChanger(HWND hBtn, HWND hText, int row, int col, bool& xTurn) {
 
             xTurn = !xTurn;
 
-            winner = CheckWinner();
-            if (winner != 0) {
-                if (winner == 1)
-                    SetWindowTextW(hText, L".!The X player Wins!.");
-                else
-                    SetWindowTextW(hText, L".!The O player Wins!.");
-            }
-            else if (CheckDraw()) {
-                SetWindowTextW(hText, L".!The game is Drawn!.");
-            }
-            else {
-                SetWindowTextW(hText, xTurn ? L"Turn : X" : L"Turn : O");
-            }
+            ChangeTurn();
         } else {
             SetWindowTextW(hText, L"is Not your turn wait a second..");
         }
 
         
+    }
+}
+
+void ChangeTurn() {
+    winner = CheckWinner();
+    if (winner != 0) {
+        if (winner == 1)
+            SetWindowTextW(hTurn, L".!The X player Wins!.");
+        else
+            SetWindowTextW(hTurn, L".!The O player Wins!.");
+    } else if (CheckDraw()) {
+        SetWindowTextW(hTurn, L".!The game is Drawn!.");
+    } else {
+        SetWindowTextW(hTurn, isXturn ? L"Turn : X" : L"Turn : O");
+        if (!isXturn) {
+            Sleep(500);  // تاخیر نیم ثانیه برای طبیعی‌تر شدن
+            bot_handler();
+        }
     }
 }
 
@@ -86,8 +69,8 @@ bool CheckDraw() {
     for (int x = 0; x < 3; x++) 
         for (int y = 0; y < 3; y++) 
             if (block[x][y] == 0)
-                return 0;
-    return 1;
+                return false;
+    return true;
 }
 
 int CheckWinner() {

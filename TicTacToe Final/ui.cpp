@@ -1,5 +1,7 @@
 ﻿#include <windows.h>
 #include "ui.h"
+#include "bot.h"
+
 
 HMENU hMenu;
 

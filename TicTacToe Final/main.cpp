@@ -1,11 +1,16 @@
 #include <windows.h>
+//#include <thread>
 #include "ui.h"
 #include "logic.h"
+#include "bot.h"
+#include <ctime>
 using namespace std;
+//std::thread bot_thread;
 
 LRESULT CALLBACK WindowProcedure(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp);
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR args, int ncmdshow) {
+	srand(time(0));
 	WNDCLASSW wc = { 0 };
 	wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
@@ -35,8 +40,10 @@ LRESULT CALLBACK WindowProcedure(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
 	case WM_CREATE:
 		AddMenus(hWnd);
 		AddControls(hWnd);
+		/*bot_thread = std::thread(bot_handler);*/
 		break;
 	case WM_DESTROY:
+		/*bot_thread.join();*/
 		PostQuitMessage(0);
 		break;
 	case WM_COMMAND:
@@ -44,18 +51,23 @@ LRESULT CALLBACK WindowProcedure(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
 		{
 		case EASY_D:
 			SetWindowTextW(hWnd, L"tic tac toe(EASY MODE)");
+			difficulty = 0;
 			break;
 		case MEDIUM_D:
 			SetWindowTextW(hWnd, L"tic tac toe(MEDIUM MODE)");
+			difficulty = 1;
 			break;
 		case HARD_D:
 			SetWindowTextW(hWnd, L"tic tac toe(HARD MODE)");
+			difficulty = 2;
 			break;
 		case VETERAN_D:
 			SetWindowTextW(hWnd, L"tic tac toe(VETERAN MODE)");
+			difficulty = 3;
 			break;
 		case AI_D:
 			SetWindowTextW(hWnd, L"tic tac toe(AI MODE)");
+			difficulty = 4;
 			break;
 		case RESTART:
 			ResetBoard();
