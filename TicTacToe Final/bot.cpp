@@ -7,15 +7,23 @@ int difficulty = 0;
 
 void bot_handler() {
     if (!isXturn && winner == 0) {
+        int pos;
         switch (difficulty) {
         case 0:
-            int pos = easy_thinker();
+            pos = easy_thinker();
             break;
         case 1:
-            int pos = easy_thinker();
+            pos = medium_thinker();
+            if (pos == -1)
+                pos = easy_thinker();
+            break;
+        case 2:
+            pos = medium_thinker();
+            if (pos == -1)
+                pos = hard_thinker();
             break;
         default:
-            int pos = easy_thinker();
+            pos = 8;// for test
             break;
         }
         int x = pos % 3;
@@ -65,6 +73,7 @@ void BotAction(int pos, int row, int col) {
 }
 
 int easy_thinker() {
+
     int pos;
     do {
         pos = rand() % 9;
@@ -74,56 +83,146 @@ int easy_thinker() {
 
 
 int medium_thinker() {
-    bool freeBlock = false;
+    int emptyCount = 0;
+    int playerCount = 0;
+    int botCount = 0;
+
+    int winable = -1;
+    int blockable = -1;
     int pos = -1;
     //   check Rows
     for (int y = 0; y < 3; y++) {
         for (int x = 0; x < 3; x++) {
+            if (block[x][y] == 1)
+                playerCount++;
+
+            if (block[x][y] == 2)
+                botCount++;
+
             if (block[x][y] == 0) {
-                if (freeBlock) {
-                    freeBlock = false;
-                    pos = -1;
-                    break;
-                }
-                else {
-                    freeBlock = true;
+                emptyCount++;
+                pos = x + y * 3;
+            }
+        }
+        if (pos != -1) {
+            if (botCount == 2 && emptyCount == 1)
+                return pos;
+            
+            if (playerCount == 2 && emptyCount == 1)
+                blockable = pos;
+        }
+        pos = -1;
+        emptyCount = 0;
+        playerCount = 0;
+        botCount = 0;
+    }
+    pos = -1;
+    emptyCount = 0;
+    playerCount = 0;
+    botCount = 0;
+
+    //   check cols
+    for (int x = 0; x < 3; x++) {
+        for (int y = 0; y < 3; y++) {
+            if (block[x][y] == 1)
+                playerCount++;
+
+            if (block[x][y] == 2)
+                botCount++;
+
+            if (block[x][y] == 0) {
+                emptyCount++;
+                pos = x + y * 3;
+            }
+        }
+        if (pos != -1) {
+            if (botCount == 2 && emptyCount == 1) 
+                return pos;
+            
+            if (playerCount == 2 && emptyCount == 1)
+                blockable = pos;
+        }
+        pos = -1;
+        emptyCount = 0;
+        playerCount = 0;
+        botCount = 0;
+    }
+
+    pos = -1;
+    emptyCount = 0;
+    playerCount = 0;
+    botCount = 0;
+    //	check Qatars
+    for (int x = 0; x < 3; x++) {
+        for (int y = 0; y < 3; y++) {
+            if (x == y) {
+                if (block[x][y] == 1)
+                    playerCount++;
+
+                if (block[x][y] == 2)
+                    botCount++;
+
+                if (block[x][y] == 0) {
+                    emptyCount++;
                     pos = x + y * 3;
                 }
             }
-            return pos;
         }
     }
+    if (pos != -1) {
+        if (botCount == 2 && emptyCount == 1)
+            return pos;
+        
+        if (playerCount == 2 && emptyCount == 1)
+            blockable = pos;
+    }
+    pos = -1;
+    emptyCount = 0;
+    playerCount = 0;
+    botCount = 0;
+    for (int x = 2; x >= 0; x--) {
+        for (int y = 0; y < 3; y++) {
+            if (x + y == 2) {
+                if (block[x][y] == 1)
+                    playerCount++;
 
-    int pos;
-    bool oneClearBlock = false;
-    //   check Rows if he can win
-    for (int x = 0; x < 3; x++) {
-        if (block[x][0] == 0) {
-            if (!oneClearBlock) {
-                oneClearBlock = true;
-                pos = x;
-            } else {
-                oneClearBlock = false;
-                pos = -1;
+                if (block[x][y] == 2)
+                    botCount++;
+
+                if (block[x][y] == 0) {
+                    emptyCount++;
+                    pos = x + y * 3;
+                }
             }
         }
-        if (pos )
     }
+    if (pos != -1) {
+        if (botCount == 2 && emptyCount == 1)
+            return pos;
+     
+        if (playerCount == 2 && emptyCount == 1)
+            blockable = pos;
+    }
+    pos = -1;
+    emptyCount = 0;
+    playerCount = 0;
+    botCount = 0;
+    
+    if (blockable >= 0)
+        return blockable;
 
-    //	check Columns if he can win
-    for (int x = 0; x < 3; x++)
-        if (block[x][0] == block[x][1] &&
-            block[x][1] == block[x][2] &&
-            block[x][0] != 0)
-            return block[x][0];
-    //	check Qatars if he can win
-    if (block[0][0] == block[1][1] &&
-        block[1][1] == block[2][2] &&
-        block[0][0] != 0)
-        return block[0][0];
-    if (block[2][0] == block[1][1] &&
-        block[1][1] == block[0][2] &&
-        block[1][1] != 0)
-        return block[1][1];
+    pos = -1;
+    emptyCount = 0;
+    playerCount = 0;
+    botCount = 0;
+    // else random target?
+    return -1;
+    
 }
 
+int hard_thinker() {
+    // اولویت بندی کردن خونه ها برای ردیف کردن دوتا
+    // اگه نبود اولویت بندی کردن برای تک خونه گرفتن
+    // تک خونه اول گوشه بعد وسط
+    return 7;// for test
+}
