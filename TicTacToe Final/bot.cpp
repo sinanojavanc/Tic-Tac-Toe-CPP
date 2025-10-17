@@ -224,5 +224,22 @@ int hard_thinker() {
     // اولویت بندی کردن خونه ها برای ردیف کردن دوتا
     // اگه نبود اولویت بندی کردن برای تک خونه گرفتن
     // تک خونه اول گوشه بعد وسط
-    return 7;// for test
+    // for test
+    //if (block[1][1] == 0)
+    //    return 4;
+    //if (block[0][0] == 0)
+    //    return 0;
+    //if (block[2][0] == 0)
+    //    return 2;
+    //if (block[0][2] == 0)
+    //    return 6;
+    //if (block[2][2] == 0)
+    //    return 8;
+    int pos;
+    do {
+        pos += rand() % 3;
+        pos += rand() % 2;
+        pos *= 2;
+    } while (block[pos % 3][pos / 3] != 0); // تا زمانی که خانه خالی پیدا شود
+    return pos;
 }
