@@ -23,7 +23,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR args, int ncmdsho
 
 	CreateWindowW(L"myWindowClass", L"tic tac toe(EASY MODE)",
 		WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-		500, 400, 360, 430,
+		500, 400, 360, 480,
 		NULL, NULL, hInst, NULL);
 
 	MSG msg = { 0 };
